@@ -7,8 +7,9 @@ TRANSDUCERMINVOLTAGE = 0.5
 TRANSDUCERMAXVOLTAGE = 4.5
 TRANSDUCERMAXPRESSURE = 1600 #In PSI
 TRANSDUCERSCALINGFACTOR = TRANSDUCERMAXPRESSURE / (TRANSDUCERMAXVOLTAGE-TRANSDUCERMINVOLTAGE)
+file_path = ''
 
-FILENAME = './mock_data.json' # TODO: Add dynamic file pathing for imported JSON files (see read_data() function)
+#FILENAME = './mock_data.json' # TODO: Add dynamic file pathing for imported JSON files (see read_data() function)
 
 # -------------------------
 # Callback stubs
@@ -19,7 +20,11 @@ def upload_file_callback(sender, app_data):
     Called when user selects a file.
     Sets a label to show the file chosen.
     """
-    dpg.set_value("file_label", f"File: {app_data['file_name']} Successfully Uploaded")
+    if "file_path_name" in app_data:
+       global file_path 
+       file_path = app_data['file_path_name']
+
+    dpg.set_value("file_label", f"File: {file_path} Successfully Uploaded")
 
 def populate_graphs_callback():
     """
@@ -193,7 +198,7 @@ def determine_motor_class(impulse):
 # Main function to parse JSON for graphing purposes, translates imported voltages into thrust/pressure values
 def read_data():
     # Open/point to the JSON file (input file to generate data from)
-    f = open(FILENAME, 'r')
+    f = open(file_path, 'r')
     data = json.load(f)
 
     # Declare lists
@@ -250,7 +255,7 @@ if __name__ == "__main__":
     
     # File Dialog (hidden until opened)
     with dpg.file_dialog(directory_selector=False, show=False, callback=upload_file_callback, tag="file_dialog_id"):
-        dpg.add_file_extension(".*")  # allow any file
+        dpg.add_file_extension(".json")  # allow json files
     
     dpg.show_viewport()
     dpg.start_dearpygui()
