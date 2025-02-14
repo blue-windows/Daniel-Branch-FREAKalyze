@@ -77,6 +77,28 @@ def exit_callback():
     """
     dpg.stop_dearpygui()
 
+def resize_callback(sender, app_data, user_data):
+   """Adjust UI elements dynamically when the viewport is resized."""
+   width, height = dpg.get_viewport_width(), dpg.get_viewport_height()
+  
+   # Only update if items exist
+   if dpg.does_item_exist("Primary Window"):
+       dpg.set_item_width("Primary Window", width)
+       dpg.set_item_height("Primary Window", height)
+  
+   if dpg.does_item_exist("left_panel"):
+       dpg.set_item_width("left_panel", width * 0.3)
+  
+   if dpg.does_item_exist("right_panel"):
+       dpg.set_item_width("right_panel", width * 0.7)
+  
+   if dpg.does_item_exist("thrust_plot"):
+       dpg.set_item_width("thrust_plot", width * 0.68)
+  
+   if dpg.does_item_exist("pressure_plot"):
+       dpg.set_item_width("pressure_plot", width * 0.68)
+
+
 
 # -------------------------
 # Building the UI
@@ -245,8 +267,11 @@ def read_data():
 
 if __name__ == "__main__":
     dpg.create_context()
-    dpg.create_viewport(title="FreakAlyze", width=1000, height=700)
+    dpg.create_viewport(title="FreakAlyze", width=1000, height=700, resizable=True)
     dpg.setup_dearpygui()
+
+    # Bind the resize callback
+    dpg.set_viewport_resize_callback(resize_callback)
     
     # Primary Window (no title bar so we can simulate a “custom” top bar)
     with dpg.window(tag="Primary Window", label="", no_title_bar=True,
