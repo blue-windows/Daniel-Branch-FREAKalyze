@@ -1,6 +1,8 @@
 import json
 import dearpygui.dearpygui as dpg
 from scipy import integrate
+from filedialogs import open_file_dialog
+import DearPyGui_DragAndDrop as dpg_dnd
 
 # NAMED CONSTANTS FOR CONVERSIONS, maybe move in future?
 TRANSDUCERMINVOLTAGE = 0.5
@@ -14,17 +16,6 @@ file_path = ''
 # -------------------------
 # Callback stubs
 # -------------------------
-
-def upload_file_callback(sender, app_data):
-    """
-    Called when user selects a file.
-    Sets a label to show the file chosen.
-    """
-    if "file_path_name" in app_data:
-       global file_path 
-       file_path = app_data['file_path_name']
-
-    dpg.set_value("file_label", f"File: {file_path} Successfully Uploaded")
 
 def populate_graphs_callback():
     """
@@ -77,6 +68,23 @@ def exit_callback():
     """
     dpg.stop_dearpygui()
 
+def upload_callback():
+   """
+   This is the new and improved file upload callback which uses
+   a deliciously aesthetic and intuitive windows file picker dialogue
+   :)
+   """
+   global file_path
+   file_path = open_file_dialog()
+   dpg.set_value("file_label", f"File: {file_path} Successfully Uploaded")
+
+def drop(data, _):
+   """
+   This is the drag and drop functionality
+   """
+   global file_path
+   file_path = data[0]
+   dpg.set_value("file_label", f"File: {file_path} Successfully Uploaded")
 
 # -------------------------
 # Building the UI
@@ -90,7 +98,7 @@ def build_ui():
     # Main menu bar across the top
     with dpg.menu_bar():
         # Just top-level items for simplicity
-        dpg.add_menu_item(label="File Upload", callback=lambda: dpg.configure_item("file_dialog_id", show=True))
+        dpg.add_menu_item(label="File Upload", callback=upload_callback)
         dpg.add_menu_item(label="Download")
         dpg.add_menu_item(label="About")
         dpg.add_menu_item(label="Help")
@@ -245,17 +253,15 @@ def read_data():
 
 if __name__ == "__main__":
     dpg.create_context()
+    dpg_dnd.initialize()
     dpg.create_viewport(title="FreakAlyze", width=1000, height=700)
+    dpg_dnd.set_drop(drop)
     dpg.setup_dearpygui()
     
     # Primary Window (no title bar so we can simulate a “custom” top bar)
     with dpg.window(tag="Primary Window", label="", no_title_bar=True,
                     width=1000, height=700, pos=(0, 0)):
         build_ui()
-    
-    # File Dialog (hidden until opened)
-    with dpg.file_dialog(directory_selector=False, show=False, callback=upload_file_callback, tag="file_dialog_id"):
-        dpg.add_file_extension(".json")  # allow json files
     
     dpg.show_viewport()
     dpg.start_dearpygui()
