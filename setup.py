@@ -7,7 +7,7 @@ operating_system = platform.system()
 if operating_system == "Windows":
     print(">> python3 -m ensurepip")
     subprocess.call("python3 -m ensurepip", shell=True)
-    if not Path('/Lib').exists():
+    if not Path('/Scripts').exists():
         print("\n\n>> python3 -m venv ../FREAKalyze")
         subprocess.call("python3 -m venv ../FREAKalyze", shell=True)
     print("\n\n>> ./Scripts/activate")
