@@ -1,7 +1,7 @@
 import platform
 import subprocess
 
-if platform.system() is "Windows":
+if platform.system() == "Windows":
    print(">> python3 windows.py")
    subprocess.call("python3 windows.py", shell=True)
 else:
