@@ -2,14 +2,15 @@ import json
 import dearpygui.dearpygui as dpg
 from scipy import integrate
 
+# This script will work for Unix and Mac machines, as well as Windows. However, it 
+# currently lacks functionality that the Windows script has
+
 # NAMED CONSTANTS FOR CONVERSIONS, maybe move in future?
 TRANSDUCERMINVOLTAGE = 0.5
 TRANSDUCERMAXVOLTAGE = 4.5
 TRANSDUCERMAXPRESSURE = 1600 #In PSI
 TRANSDUCERSCALINGFACTOR = TRANSDUCERMAXPRESSURE / (TRANSDUCERMAXVOLTAGE-TRANSDUCERMINVOLTAGE)
 file_path = ''
-
-#FILENAME = './mock_data.json' # TODO: Add dynamic file pathing for imported JSON files (see read_data() function)
 
 # -------------------------
 # Callback stubs

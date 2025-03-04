@@ -4,14 +4,14 @@ from scipy import integrate
 from filedialogs import open_file_dialog
 import DearPyGui_DragAndDrop as dpg_dnd
 
+# This script is for Windows machines only and utilizes modules that only exist on Windows
+
 # NAMED CONSTANTS FOR CONVERSIONS, maybe move in future?
 TRANSDUCERMINVOLTAGE = 0.5
 TRANSDUCERMAXVOLTAGE = 4.5
 TRANSDUCERMAXPRESSURE = 1600 #In PSI
 TRANSDUCERSCALINGFACTOR = TRANSDUCERMAXPRESSURE / (TRANSDUCERMAXVOLTAGE-TRANSDUCERMINVOLTAGE)
 file_path = ''
-
-#FILENAME = './mock_data.json' # TODO: Add dynamic file pathing for imported JSON files (see read_data() function)
 
 # -------------------------
 # Callback stubs
